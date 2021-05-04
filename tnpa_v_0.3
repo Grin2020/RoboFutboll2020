@@ -1,0 +1,97 @@
+int joystiky1 = 0;
+int joystiky2 = 0;
+int joystiky3 = 0;
+int signal1;
+int signal2;
+int signal3;
+int speedA;
+int speedB;
+int speedC;
+void sendspeed (int motorn, int speedn){
+ if(motorn == 0){
+  if( abs(speedA - speedn) > 5){
+   if(speedn < 1100){
+    speedn = 1100;
+   }
+   else if(speedn > 1900){
+    speedn = 1900;
+   } 
+   Serial.print('A');
+   Serial.println(speedn); 
+   speedA = speedn; 
+   digitalWrite(13,1);
+   delay(50);
+   digitalWrite(13,0);   
+  }
+ }
+ else if(motorn == 1){
+  if( abs(speedB - speedn) > 5){
+   if(speedn < 1100){
+    speedn = 1100;
+   }
+   else if(speedn > 1900){
+    speedn = 1900;
+   }
+   Serial.print('B');
+   Serial.println(speedn); 
+   speedB = speedn;
+   digitalWrite(13,1);
+   delay(50);
+   digitalWrite(13,0);   
+  }
+ }
+ else if(motorn == 2){
+  if( abs(speedC - speedn) > 5){
+   if(speedn < 1100){
+    speedn = 1100;
+   }
+   else if(speedn > 1900){
+    speedn = 1900;
+   }    
+   Serial.print('C');
+   Serial.println(speedn); 
+   speedC = speedn;
+   digitalWrite(13,1);    
+   delay(50);
+   digitalWrite(13,0);   
+  }
+ }
+}
+
+void setup() {
+ Serial.begin(9600);
+}
+void loop() {
+  joystiky1 = analogRead(A0);//глубина
+// if(joystiky1 > 700){
+//   joystiky1 = 700;
+//  }
+  joystiky2 = analogRead(A1);//y
+  joystiky3 = analogRead(A2);//x
+  //Serial.print("j1: ");
+  /*Serial.print(joystiky1);
+  Serial.print(" ");
+  Serial.print(joystiky2);
+  Serial.print(" ");
+  Serial.println(joystiky3);
+  */
+    
+  signal1 =   map(joystiky1, 144, 912, 1300,1700);
+  signal2 =   map(joystiky2, 0, 917, 1300, 1700); 
+  signal3 =   map(joystiky3, 0, 898, 1300, 1700);
+ /* Serial.print(signal1);
+  Serial.print(" ");
+  Serial.print(signal2);
+  Serial.print(" ");
+  Serial.print(signal3);
+  Serial.println(" ");*/
+  sendspeed(1,3000 + signal3 - signal2 - 1500);
+  sendspeed(2,signal2 + signal3 - 1500);
+  sendspeed(0,3000 - signal1);
+  /*Serial.print(3000 + signal3 - signal2 - 1500);
+  Serial.print(" ");
+  Serial.print(signal2 + signal3 - 1500);
+  Serial.print(" ");
+  Serial.print(3000 - signal1);
+  Serial.println(" ");*/
+}
